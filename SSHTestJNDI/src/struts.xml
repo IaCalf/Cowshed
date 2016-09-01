@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<!-- 新增页<base href="<%=basePath%>">没有时加上  namespace="/" -->
+	<package name="default" extends="struts-default" namespace="/" >
+		<!-- 教员表首页分页操作 -->
+		<action name="teacher" class="te" method="getTeacherPage">
+			<result>/pages/teacher.jsp</result>
+		</action>
+		
+		<!-- 教员表分页操作 -->
+		<action name="teacherPage" class="te" method="getPage">
+			<result>/pages/teacher.jsp</result>
+		</action>
+		<!-- 教员表添加操作 -->
+		<action name="addTeacher" class="te" method="addTeacher">
+			<result>/pages/teacher.jsp</result>
+		 </action>
+		 <!-- 教员表修改操作 -->
+		<action name="upTeacher" class="te" method="updateTeacher">
+			<result>/pages/teacher.jsp</result>
+		 </action>
+		<!-- 教员表删除操作 -->
+		<action name="deleteTeacher" class="te" method="deleteTeacher">
+			<result>/pages/teacher.jsp</result>
+		</action>
+		<!-- 获取教员信息 -->
+		<action name="getTeacher" class="te" method="getSingleTeacher">
+			<result>/pages/upTeacher.jsp</result>
+		</action>
+		
+		
+		<!-- 部门表分页操作 -->
+		<action name="deptPage" class="de" method="getPage">
+			<result>/pages/dept.jsp</result>
+		</action>
+		<!-- 获取部门信息 -->
+		<action name="getDept" class="de" method="getSingleDept">
+			<result>/pages/upDept.jsp</result>
+		</action>
+		<!-- 部门表添加,修改操作 -->
+		
+		<action name="addUpdate" class="de" method="addOrUpdateDept">
+			<result>/pages/dept.jsp</result>
+		 </action>
+		<!-- 部门表删除操作 -->
+		<action name="deleteDept" class="de" method="deleteDept">
+			<result>/pages/dept.jsp</result>
+		</action>
+	</package>
+</struts>    

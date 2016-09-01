@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop.xsd" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	default-autowire="byName">
+
+
+	<!-- JNDI -->
+	<!-- <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:comp/env/jdbc/jbit"/>
+	</bean> -->
+	
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<!-- 注意加上这句 -->
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver"></property>
+		<property name="url"
+			value="jdbc:oracle:thin:@localhost:1521:jbit">
+		</property>
+		<property name="username" value="yi"></property>
+		<property name="password" value="123"></property>
+	</bean>
+	
+	<!-- session工厂 -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.Oracle9Dialect
+				</prop>
+			</props>
+		</property>
+		<!-- 关联映射 -->
+		<property name="annotatedClasses">
+			<list>
+				<value>entity.Teacher</value>
+				<value>entity.Dept</value></list>
+		</property></bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- ============================================= -->
+	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"></property>  
+    </bean>
+    
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+         <tx:attributes>
+             <!-- 哪些方法需要事务 -->
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="set*" read-only="true" />
+			<!-- REQUIRED表示当前存在事务则使用当前，没有则开启新的事务 -->
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="up*" propagation="REQUIRED" />
+			<tx:method name="del*" propagation="REQUIRED" />
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+         </tx:attributes>
+    </tx:advice>
+	<aop:config proxy-target-class="true">
+         <!-- <aop:advisor advice-ref="txAdvice" pointcut="execution(* dao.*.*(..))"/> -->
+         <aop:pointcut expression="execution(public * biz.*.*(..))" id="pointcut"/>
+         <aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut"/>
+    </aop:config>
+	<!-- ============================================= -->
+	
+	<!-- dao -->
+	<bean id="teacherDao" class="dao.impl.TeacherDaoImpl"/>
+	<bean id="deptDao" class="dao.impl.DeptDaoImpl"/>
+	<!-- biz -->
+	<bean id="teacherBiz" class="biz.impl.TeacherBizImpl"/>
+	<bean id="deptBiz" class="biz.impl.DeptBizImpl"/>
+	<!-- action -->
+	<bean id="te" class="action.TeacherAction"/>
+	<bean id="de" class="action.DeptAction"/>
+	</beans>
