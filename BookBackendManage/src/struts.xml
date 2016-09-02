@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<package name="default" extends="struts-default" namespace="/">
+		<!-- 初始化首页 -->
+		<action name="getBookInfo" class="bo" method="getBookInfos">
+			<result>/pages/bookInfo.jsp</result>
+		</action>
+		<!-- 图书分页 -->
+		<action name="getBookInfoPage" class="bo" method="getBookInfoPage">
+			<result>/pages/bookInfo.jsp</result>
+		</action>
+		<!-- 查看书本信息 -->
+		<action name="lookBookInfo" class="bo" method="lookBookInfo">
+			<result>/pages/lookBookInfo.jsp</result>
+		</action>
+		<!-- 进入图书添加页 -->
+		<action name="goAddBook" class="bp" method="gotoAddBook">
+			<result>/pages/addBookInfo.jsp</result>
+		</action>
+		<!-- 执行图书添加 -->
+		<action name="addBookInfo" class="bo" method="addBookInfo">
+			<result>/pages/lookBookInfo.jsp</result>
+		</action>
+		<!-- 执行图书修改 -->
+		<!-- 执行图书删除 -->
+	</package>
+</struts>    
