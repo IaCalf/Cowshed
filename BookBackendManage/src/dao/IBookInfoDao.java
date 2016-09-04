@@ -5,10 +5,8 @@ import java.util.List;
 import entity.BookInfo;
 
 public interface IBookInfoDao {
-	//查询总条数
-	public int getBookInfoCount();
-	//分页查询
-	public List<BookInfo> getBookInfoByPage(int no, int size);
+	//查询结果总条数
+	public int getBookInfoByNameCount(String name);
 	//模糊查询
 	public List<BookInfo> getNameBookInfoByPage(String name, int no, int size);
 	//根据ID查询

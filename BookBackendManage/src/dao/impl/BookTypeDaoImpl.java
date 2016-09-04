@@ -21,7 +21,7 @@ public class BookTypeDaoImpl implements IBookTypeDao {
 	@Override
 	public List<BookType> getBookTypeAll() {
 		// TODO Auto-generated method stub
-		return sessionFactory.openSession().createQuery("from BookType").list();
+		return sessionFactory.getCurrentSession().createQuery("from BookType").list();
 	}
 
 	@Override

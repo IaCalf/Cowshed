@@ -9,11 +9,39 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1 align="center">图书借阅系统--后台管理</h1>
-	<form action="查询.action" method="post">
-		图书名称:<input type="text" value="cookie里查询记录">
-				<input type="submit" value="查询">
-	</form>
+	<div style="margin: 0 auto;width: 800px;">
+		<h1 align="center">图书借阅系统--后台管理</h1>
+	<p>
+		<script type="text/javascript">
+		//将cookie里面的值读入搜索框中
+		window.onload=function(){
+			document.getElementById("cookie").value=getCookie("cookieName");
+		}
+		/**
+		//document.cookie = "cookieName=" + escape("要写入的内容");//cookieName为要写入的Cookie的名称  
+		  
+		//读Cookie，返回值为相应Cookie的内容
+		function getCookie(cookieName){  
+		    var cookieContent = '';  
+		    var cookieAry = document.cookie.split("; ");//得到Cookie数组  
+		    for(var i=0;i<cookieAry.length;i++){  
+		        var temp = cookieAry[i].split("=");  
+		        if(temp[0] == cookieName){  
+		             cookieContent = decodeURIComponent(temp[1]); 
+		        }  
+		    }  
+		    return cookieContent;  
+		} */
+		function getCookie(name) {
+            var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+            if (arr != null) return decodeURIComponent(arr[2]); return null;
+        };
+		</script>
+		<form action="getNameBook.action" method="post">
+			图书名称:<input type="text" id="cookie" name="cname" value="">
+					<input type="submit" value="查询">
+		</form>
+	</p>
 	<input type="button" id="add" value="新增员工" onclick="Add()">
 	<table border="1" cellpadding="0" cellspacing="0" width="800" align="center">
     	<tr>
@@ -27,7 +55,7 @@
     		<th>操作</th>
     	</tr>
     	<c:forEach items="${pt.pagedata }" var="t" varStatus="i">
-	    	<tr height="30" <%-- <c:if test="${i%2==0 }">style="background-color:#DDD"</c:if> --%>>
+	    	<tr height="30" <c:if test="${i.index%2==0 }">style="background-color:#DDD"</c:if>>
 	    		<td>${t.bookCode}</td>
 	    		<td>${t.bookType.getTypeName() }</td>
 	    		<td>${t.bookName }</td>
@@ -37,8 +65,8 @@
 	    		<td>${t.isBorrow==0?"未借阅":"已借阅" }</td>
 	    		<td>
 	    			<a href="lookBookInfo.action?id=${t.bookId }" style="color:#000;">查看</a>&nbsp;
-	    			<a href="getTeacher.action?id=${t.bookId }" style="color:#000;">修改</a>&nbsp;
-	    			<a href="javascript:if(confirm('确认是否删除此新闻？')) location='deleteTeacher.action?id=${t.bookId }'" style="color:#000;">删除</a>
+	    			<a href="upBook.action?id=${t.bookId }" style="color:#000;">修改</a>&nbsp;
+	    			<a href="javascript:if(confirm('确认是否删除此新闻？')) location='deleteBook.action?id=${t.bookId }'" style="color:#000;">删除</a>
 	    		</td>
     	</c:forEach>
     	<tr height="28">
@@ -54,7 +82,7 @@
 	    			//脚本运行后，page.html将在新窗体newwindow中打开，宽为500，高为500，距屏顶100象素，屏左500象素，无工具条，无菜单条，无滚动条，不可调整大小，无地址栏，无状态栏。
 	    			
 	    		}
-	    	</script> 
+	    	</script>
     		<td colspan="8" align="right">
     			<input type="button" onclick="javascript:location.href='pages/index.jsp'" value="返回">
     			
@@ -67,5 +95,6 @@
     		</td>
     	</tr>
     </table>
+	</div>
 </body>
 </html>

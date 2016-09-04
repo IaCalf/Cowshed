@@ -30,23 +30,24 @@ border-color: #ddd;
 </style>
 </head>
 <body>
-	<form action="addBookInfo.action" method="post">
+	<form action="updateBookInfo.action" method="post">
 		<table border="1" cellpadding="0" cellspacing="0" width="400" height="400" align="center">
-			<caption><h2>添加图书信息</h2></caption>
+			<caption><h2>修改图书信息</h2></caption>
 			<tr>
 				<td class="tendent">图书编号</td>
-				<td class="tendentrig"><input type="text" name="bookInfo.bookCode"/></td>
+				<td class="tendentrig"><input type="text" value="${b.bookCode }" name="bookInfo.bookCode"/></td>
 			</tr>
 			<tr>
 				<td class="tendent">图书名称</td>
-				<td class="tendentrig"><input type="text" name="bookInfo.bookName"/></td>
+				<td class="tendentrig"><input type="text" value="${b.bookName }" name="bookInfo.bookName"/></td>
 			</tr>
 			<tr>
 				<td class="tendent">图书类型</td>
 				<td class="tendentrig">
 					<select name="tName" size="1">
 						<c:forEach  items="${bpa }" var="t">
-							<option value="${t.id }">${t.typeName}</option>
+							<option value="${t.id }" <c:if test="${t.id==b.bookType.id }">selected="selected"</c:if>>${t.typeName}</option>
+							
 	                    </c:forEach>
                 	</select>
              	</td>
@@ -54,37 +55,37 @@ border-color: #ddd;
 			<tr>
 				<td class="tendent">作 者</td>
 				<td class="tendentrig">
-					<input type="text" name="bookInfo.bookAuthor"/>
+					<input type="text" value="${b.bookAuthor }" name="bookInfo.bookAuthor"/>
                 </td>
 			</tr>
 			<tr>
 				<td class="tendent">出版社</td>
-				<td class="tendentrig"><input type="text" name="bookInfo.publishPress"/></td>
+				<td class="tendentrig"><input type="text" value="${b.publishPress }" name="bookInfo.publishPress"/></td>
 			</tr>
 			<tr>
 				<td class="tendent">是否借阅</td>
 				<td class="tendentrig">
 					<select name="bookInfo.isBorrow" size="1">
-							<option value="0">未借阅</option>
-							<option value="1">已借阅</option>
+							<option value="0" <c:if test="${b.isBorrow==0 }">selected="selected"</c:if>>未借阅</option>
+							<option value="1" <c:if test="${b.isBorrow==1 }">selected="selected"</c:if>>已借阅</option>
 	                </select>
                 </td>
 			</tr>
 			<tr>
 				<td class="tendent">入库人</td>
-				<td class="tendentrig"><input type="text" name="bookInfo.createdby"/></td>
+				<td class="tendentrig"><input type="text" value="${b.createdby }" name="bookInfo.createdby"/></td>
 			</tr>
 			<tr>
 				<td class="tendent">入库时间</td>
-				<td class="tendentrig">
-					<input type="datetime-local" name="bookInfo.creationTime"/>
+				<td class="tendentrig"> 
+					<input type="datetime-local" value="${b.creationTime }" name="bookInfo.creationTime"/>
                 </td>
 			</tr>
 			<tr>
 				<td colspan="2" align="center">
-					<%-- <input type="hidden"  name="" value="" /> --%>
+					<input type="hidden"  name="bookInfo.bookId" value="${b.bookId }" />
 					<input type="submit" value="提交" />
-					<input type="button" align="middle" onclick="javascript:if(confirm('确认关闭吗？')) window.close()" value="关闭" />
+					<input type="button" align="middle" onclick="javascript:location.href='getBookInfo.action'" value="返回" />
 				</td>
 			</tr>
 		</table>

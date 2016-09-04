@@ -2,6 +2,8 @@ package biz.impl;
 
 import java.util.List;
 
+import org.hibernate.Query;
+
 import dao.IBookInfoDao;
 import biz.IBookInfoBiz;
 import entity.BookInfo;
@@ -19,34 +21,22 @@ public class BookInfoBizImpl implements IBookInfoBiz {
 	}
 
 	@Override
-	public int getBookInfoCount() {
-		// TODO Auto-generated method stub
-		return bookInfoDao.getBookInfoCount();
-	}
-
-	@Override
-	public List<BookInfo> getBookInfoByPage(int no, int size) {
-		// TODO Auto-generated method stub
-		return bookInfoDao.getBookInfoByPage(no, size);
-	}
-
-	@Override
 	public List<BookInfo> getNameBookInfoByPage(String name, int no, int size) {
 		// TODO Auto-generated method stub
 		return bookInfoDao.getNameBookInfoByPage(name, no, size);
 	}
 
 	@Override
-	public BookInfo getBookInfoById(int bookId) {
+	public BookInfo getBookInfoById(long bookId) {
 		// TODO Auto-generated method stub
-		return bookInfoDao.getBookInfoById((long)bookId);
+		return bookInfoDao.getBookInfoById(bookId);
 	}
 
 	@Override
-	public void deleteBookInfo(int bookId) {
+	public void deleteBookInfo(long bookId) {
 		// TODO Auto-generated method stub
 		BookInfo bookInfo = new BookInfo();
-		bookInfo.setBookId((long)bookId);
+		bookInfo.setBookId(bookId);
 		bookInfoDao.deleteBookInfo(bookInfo);
 		System.out.println("删除成功！");
 	}
@@ -63,6 +53,12 @@ public class BookInfoBizImpl implements IBookInfoBiz {
 		// TODO Auto-generated method stub
 		bookInfoDao.addBookInfo(bookInfo);
 		System.out.println("添加成功！");
+	}
+
+	@Override
+	public int getBookInfoByNameCount(String name) {
+		// TODO Auto-generated method stub
+		return bookInfoDao.getBookInfoByNameCount(name);
 	}
 
 }

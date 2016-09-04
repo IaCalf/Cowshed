@@ -2,6 +2,7 @@ package dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import dao.IBookInfoDao;
@@ -19,22 +20,17 @@ public class BookInfoDaoImpl implements IBookInfoDao {
 	}
 
 	@Override
-	public int getBookInfoCount() {
-		// TODO Auto-generated method stub
-		return Integer.parseInt(sessionFactory.getCurrentSession().createQuery("select count(*) from BookInfo").uniqueResult().toString());
-	}
-
-	@Override
-	public List<BookInfo> getBookInfoByPage(int no, int size) {
-		// TODO Auto-generated method stub
-		//from BookInfo order by creationTime
-		return sessionFactory.getCurrentSession().createQuery("from BookInfo").setFirstResult((no-1)*size).setMaxResults(size).list();
-	}
-
-	@Override
 	public List<BookInfo> getNameBookInfoByPage(String name, int no, int size) {
 		// TODO Auto-generated method stub
-		return sessionFactory.getCurrentSession().createQuery("from BookInfo b where b.bookName like :bookName").setString("bookName", "%"+name+"%").setFirstResult((no-1)*size).setMaxResults(size).list();
+		Query createQuery = null;
+		String hql="from BookInfo b where b.bookName like :bookName";
+		if(name == null){
+			hql="from BookInfo";
+			createQuery = sessionFactory.getCurrentSession().createQuery(hql);
+		}else{
+			createQuery = sessionFactory.getCurrentSession().createQuery(hql).setString("bookName", "%"+name+"%");
+		}
+		return createQuery.setFirstResult((no-1)*size).setMaxResults(size).list();
 	}
 
 	@Override
@@ -59,6 +55,21 @@ public class BookInfoDaoImpl implements IBookInfoDao {
 	public void addBookInfo(BookInfo bookInfo) {
 		// TODO Auto-generated method stub
 		sessionFactory.getCurrentSession().save(bookInfo);
+	}
+
+	@Override
+	public int getBookInfoByNameCount(String name) {
+		// TODO Auto-generated method stub
+		Query createQuery = null;
+		String hql="select count(*) from BookInfo b where b.bookName like :bookName";
+		if(name == null){
+			hql="select count(*) from BookInfo";
+			createQuery = sessionFactory.getCurrentSession().createQuery(hql);
+		}else{
+			createQuery = sessionFactory.getCurrentSession().createQuery(hql).setString("bookName", "%"+name+"%");
+		}
+		
+		return Integer.valueOf(createQuery.uniqueResult().toString());
 	}
 
 }

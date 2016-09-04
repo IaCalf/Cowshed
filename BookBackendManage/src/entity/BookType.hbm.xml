@@ -8,7 +8,10 @@
     <class name="entity.BookType" table="BOOK_TYPE" schema="YI" lazy="false">
         <id name="id" type="java.lang.Long">
             <column name="ID" precision="10" scale="0" />
-            <generator class="assigned" />
+            <!-- <generator class="assigned" /> -->
+            <generator class="sequence">   
+		     	<param name="sequence">sq_book_type</param>   
+		   	</generator> 
         </id>
         <property name="typeName" type="java.lang.String">
             <column name="TYPE_NAME" length="20" not-null="true" />

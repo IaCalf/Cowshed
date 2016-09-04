@@ -20,9 +20,28 @@
 		</action>
 		<!-- 执行图书添加 -->
 		<action name="addBookInfo" class="bo" method="addBookInfo">
-			<result>/pages/lookBookInfo.jsp</result>
+			<result>/pages/bookInfo.jsp</result>
 		</action>
 		<!-- 执行图书修改 -->
+			<!-- 获取图书信息 -->
+		<action name="upBook" class="bo" method="lookBookInfo">
+			<result>/pages/upBookInfo.jsp</result>
+		</action>
+			<!-- 获取图书类型 -->
+		<action name="goupBook" class="bp" method="gotoAddBook">
+			<result>/pages/upBookInfo.jsp</result>
+		</action>
+			<!-- 提交修改请求 -->
+		<action name="updateBookInfo" class="bo" method="updateBookInfo">
+			<result>/pages/bookInfo.jsp</result>
+		</action>
 		<!-- 执行图书删除 -->
+		<action name="deleteBook" class="bo" method="deleteBookInfo">
+			<result>/pages/bookInfo.jsp</result>
+		</action>
+		<!-- 查询图书 -->
+		<action name="getNameBook" class="bo" method="getBookInfoPage">
+			<result>/pages/bookInfo.jsp</result>
+		</action>
 	</package>
 </struts>    

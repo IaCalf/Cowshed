@@ -1,9 +1,15 @@
 package action;
 
-import java.math.BigDecimal;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts2.ServletActionContext;
 
 import util.PageTool;
 import biz.IBookInfoBiz;
@@ -18,7 +24,8 @@ public class BookInfoAction extends ActionSupport {
 	private IBookInfoBiz bookInfoBiz;
 	private BookInfo bookInfo;
 	private int no;
-	private int id;
+	private long id;
+	private String cname;//查询关键词
 	private long tName;//图书类型ID
 	private PageTool<BookInfo> pt = new PageTool<BookInfo>();
 	public IBookInfoBiz getBookInfoBiz() {
@@ -39,10 +46,10 @@ public class BookInfoAction extends ActionSupport {
 	public void setNo(int no) {
 		this.no = no;
 	}
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	
@@ -52,13 +59,20 @@ public class BookInfoAction extends ActionSupport {
 	public void setTName(long tName) {
 		this.tName = tName;
 	}
+	
+	public String getCname() {
+		return cname;
+	}
+	public void setCname(String cname) {
+		this.cname = cname;
+	}
 	/**
 	 * 初始化首页
 	 * @return
 	 */
 	public String getBookInfos(){
-		pt.setTotalCount(bookInfoBiz.getBookInfoCount());
-		pt.setPagedata(bookInfoBiz.getBookInfoByPage(pt.getPageno(), pt.getPagesize()));
+		pt.setTotalCount(bookInfoBiz.getBookInfoByNameCount(null));
+		pt.setPagedata(bookInfoBiz.getNameBookInfoByPage(null, pt.getPageno(), pt.getPagesize()));
 		ActionContext.getContext().getSession().put("pt", pt);
 		
 		return SUCCESS;
@@ -69,9 +83,24 @@ public class BookInfoAction extends ActionSupport {
 	 * @return
 	 */
 	public String getBookInfoPage(){
-		pt.setTotalCount(bookInfoBiz.getBookInfoCount());
+		if(cname != null){
+			//HttpServletResponse response = (HttpServletResponse)
+			//ActionContext.getContext().get(org.apache.struts2.StrutsStatics.HTTP_RESPONSE);
+			try {
+				String uname=URLEncoder.encode(cname, "utf-8");
+				Cookie cookie = new Cookie("cookieName",uname);
+				ServletActionContext.getResponse().addCookie(cookie);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			//response.addCookie(cookie);
+		}
+		System.out.println(cname);
+		pt.setTotalCount(bookInfoBiz.getBookInfoByNameCount(cname));
 		pt.setPageno(no);
-		pt.setPagedata(bookInfoBiz.getBookInfoByPage(pt.getPageno(), pt.getPagesize()));
+		pt.setPagedata(bookInfoBiz.getNameBookInfoByPage(cname, pt.getPageno(), pt.getPagesize()));
 		ActionContext.getContext().getSession().put("pt", pt);
 		return SUCCESS;
 	}
@@ -79,14 +108,18 @@ public class BookInfoAction extends ActionSupport {
 	 * 获取书本信息
 	 * @return
 	 */
-	public String lookBookInfo(){
-		BookInfo book = bookInfoBiz.getBookInfoById(id);
+	public String lookBookInfo() throws InvocationTargetException{
+		System.out.println("--------------------------");
+		System.out.println(id);
+		BookInfo book=null;
+		book = bookInfoBiz.getBookInfoById(id);
+		System.out.println(book.getBookName());
 		ActionContext.getContext().getSession().put("b", book);
 		return SUCCESS;
 	}
 	
 	/**
-	 * 获取书本信息
+	 * 添加书本
 	 * @return
 	 */
 	public String addBookInfo(){
@@ -98,6 +131,47 @@ public class BookInfoAction extends ActionSupport {
 		bookInfo.setPublishDate(nousedate);
 		bookInfo.setLastUpdatetime(nousedate);
 		bookInfoBiz.addBookInfo(bookInfo);
+		getBookInfos();
 		return SUCCESS;
 	}
+	/**
+	 * 修改书本
+	 * @return
+	 */
+	public String updateBookInfo(){
+		System.out.println(bookInfo.getBookId());
+		Date date = new Date();       
+		Timestamp nousedate = new Timestamp(date.getTime());
+		BookType bType = new BookType();
+		bType.setId(tName);
+		bookInfo.setBookType(bType);
+		bookInfo.setPublishDate(nousedate);
+		bookInfo.setLastUpdatetime(nousedate);
+		bookInfoBiz.updateBookInfo(bookInfo);
+		getBookInfos();
+		return SUCCESS;
+	}
+	
+	/**
+	 * 删除书本
+	 * @return
+	 */
+	public String deleteBookInfo(){
+		bookInfoBiz.deleteBookInfo(id);
+		getBookInfos();
+		return SUCCESS;
+	}
+	
+	/**
+	 * 查询书本
+	 * @return
+	 */
+	/*public String getNameBookInfoByPage(){
+		pt.setPageno(no);
+		List<BookInfo> books = bookInfoBiz.getNameBookInfoByPage(cname, pt.getPageno(), pt.getPagesize());
+		pt.setTotalCount(books.size());
+		pt.setPagedata(books);
+		ActionContext.getContext().getSession().put("pt", pt);
+		return SUCCESS;
+	}*/
 }
