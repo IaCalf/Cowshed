@@ -72,9 +72,9 @@ public class BookInfoAction extends ActionSupport {
 	 */
 	public String getBookInfos(){
 		pt.setTotalCount(bookInfoBiz.getBookInfoByNameCount(null));
+		pt.setPageno(1);
 		pt.setPagedata(bookInfoBiz.getNameBookInfoByPage(null, pt.getPageno(), pt.getPagesize()));
 		ActionContext.getContext().getSession().put("pt", pt);
-		
 		return SUCCESS;
 	}
 	
@@ -87,9 +87,9 @@ public class BookInfoAction extends ActionSupport {
 			//HttpServletResponse response = (HttpServletResponse)
 			//ActionContext.getContext().get(org.apache.struts2.StrutsStatics.HTTP_RESPONSE);
 			try {
-				String uname=URLEncoder.encode(cname, "utf-8");
+				String uname=URLEncoder.encode(cname, "utf-8");//编码
 				Cookie cookie = new Cookie("cookieName",uname);
-				ServletActionContext.getResponse().addCookie(cookie);
+				ServletActionContext.getResponse().addCookie(cookie);//获取Response并将cookie存入Cookie
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -102,6 +102,7 @@ public class BookInfoAction extends ActionSupport {
 		pt.setPageno(no);
 		pt.setPagedata(bookInfoBiz.getNameBookInfoByPage(cname, pt.getPageno(), pt.getPagesize()));
 		ActionContext.getContext().getSession().put("pt", pt);
+		addActionMessage(null);//清空值
 		return SUCCESS;
 	}
 	/**
@@ -132,6 +133,7 @@ public class BookInfoAction extends ActionSupport {
 		bookInfo.setLastUpdatetime(nousedate);
 		bookInfoBiz.addBookInfo(bookInfo);
 		getBookInfos();
+		addActionMessage("添加成功！");
 		return SUCCESS;
 	}
 	/**
@@ -149,6 +151,7 @@ public class BookInfoAction extends ActionSupport {
 		bookInfo.setLastUpdatetime(nousedate);
 		bookInfoBiz.updateBookInfo(bookInfo);
 		getBookInfos();
+		addActionMessage("修改成功！");
 		return SUCCESS;
 	}
 	
@@ -159,6 +162,7 @@ public class BookInfoAction extends ActionSupport {
 	public String deleteBookInfo(){
 		bookInfoBiz.deleteBookInfo(id);
 		getBookInfos();
+		addActionMessage("删除成功！");
 		return SUCCESS;
 	}
 	

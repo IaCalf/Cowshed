@@ -27,6 +27,7 @@ public class BookTypeAction extends ActionSupport {
 	 * @return
 	 */
 	public String gotoAddBook(){
+		System.out.println("------------------------------");
 		List<BookType> bookTypeAll = bookTypeBiz.getBookTypeAll();
 		ActionContext.getContext().getSession().put("bpa", bookTypeAll);
 		return SUCCESS;

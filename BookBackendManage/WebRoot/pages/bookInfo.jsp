@@ -9,13 +9,23 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<div style="margin: 0 auto;width: 800px;">
+	<div  style="margin: 0 auto;width: 800px;">
 		<h1 align="center">图书借阅系统--后台管理</h1>
 	<p>
 		<script type="text/javascript">
 		//将cookie里面的值读入搜索框中
 		window.onload=function(){
-			document.getElementById("cookie").value=getCookie("cookieName");
+			if(getCookie("cookieName")!="\"\""){
+				document.getElementById("cookie").value=getCookie("cookieName");
+			}
+			
+			/**
+			进入首页加载数据
+			if(${pt==null}){
+				window.onload=function(){
+					window.location="getBookInfo.action?cname";
+				}
+			} */
 		}
 		/**
 		//document.cookie = "cookieName=" + escape("要写入的内容");//cookieName为要写入的Cookie的名称  
@@ -36,11 +46,14 @@
             var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
             if (arr != null) return decodeURIComponent(arr[2]); return null;
         };
+        
 		</script>
-		<form action="getNameBook.action" method="post">
-			图书名称:<input type="text" id="cookie" name="cname" value="">
-					<input type="submit" value="查询">
-		</form>
+		<div align="center">
+			<form action="getNameBook.action" method="post">
+				图书名称:<input type="text" id="cookie" name="cname" value="">
+						<input type="submit" value="查询">
+			</form>
+		</div>
 	</p>
 	<input type="button" id="add" value="新增员工" onclick="Add()">
 	<table border="1" cellpadding="0" cellspacing="0" width="800" align="center">
@@ -54,6 +67,9 @@
     		<th>是否借阅</th>
     		<th>操作</th>
     	</tr>
+    	<c:if test="${pt.pagedata.size()==0}">
+    		<tr><td colspan="8"><h3 align="center">没有匹配项</h3></td></tr>
+    	</c:if>
     	<c:forEach items="${pt.pagedata }" var="t" varStatus="i">
 	    	<tr height="30" <c:if test="${i.index%2==0 }">style="background-color:#DDD"</c:if>>
 	    		<td>${t.bookCode}</td>
@@ -82,9 +98,12 @@
 	    			//脚本运行后，page.html将在新窗体newwindow中打开，宽为500，高为500，距屏顶100象素，屏左500象素，无工具条，无菜单条，无滚动条，不可调整大小，无地址栏，无状态栏。
 	    			
 	    		}
+	    		function up(){
+	    			window.location="goupBook.action";
+	            }
 	    	</script>
     		<td colspan="8" align="right">
-    			<input type="button" onclick="javascript:location.href='pages/index.jsp'" value="返回">
+    			<input type="button" onclick="javascript:location.href='getBookInfo.action?cname'" value="返回">
     			
     			<input id="no" size="6"><button onclick="getEmp()">GO</button>
     			<a href="getBookInfoPage.action?no=1">首页</a>

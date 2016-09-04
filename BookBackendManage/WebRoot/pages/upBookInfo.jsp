@@ -44,10 +44,16 @@ border-color: #ddd;
 			<tr>
 				<td class="tendent">图书类型</td>
 				<td class="tendentrig">
+					<script type="text/javascript">
+						if(${bpa==null}){
+							window.onload=function(){
+								window.location="goupBook.action";
+							}
+						}
+					</script>
 					<select name="tName" size="1">
 						<c:forEach  items="${bpa }" var="t">
 							<option value="${t.id }" <c:if test="${t.id==b.bookType.id }">selected="selected"</c:if>>${t.typeName}</option>
-							
 	                    </c:forEach>
                 	</select>
              	</td>
