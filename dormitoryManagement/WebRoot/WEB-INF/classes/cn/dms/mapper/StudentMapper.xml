@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dms.dao.IStudentDao">
+	<!-- <resultMap type="cn.dms.pojo.TStudent" id="ts">
+		<id property="studentid" column="STUDENTID"/>
+		<result property="stunum" column="STUNUM"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="name" column="NAME"/>
+		<result property="dormname" column="DORMNAME"/>
+		<result property="sex" column="SEX"/>
+		<result property="tel" column="TEL"/>
+		<association property="TDormbuild" javaType="cn.dms.pojo.TDormbuild">
+			<id property="dormbuildid" column="DORMBUILDID"/>
+			<result property="dormbuildname" column="DORMBUILDNAME"/>
+			<result property="dormbuilddetail" column="DORMBUILDDETAIL"/>
+		</association>
+	</resultMap> -->
+	<!-- 学生登录方法 -->
+	<select id="loginStudent" parameterType="cn.dms.pojo.TStudent" resultType="cn.dms.pojo.TStudent">
+		select * from T_Student where stunum = #{stunum} and password = #{password}
+	</select>
+	
+</mapper>

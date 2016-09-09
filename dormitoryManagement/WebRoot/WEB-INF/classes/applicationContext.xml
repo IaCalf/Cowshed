@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+				http://www.springframework.org/schema/beans 
+				http://www.springframework.org/schema/beans/spring-beans.xsd 
+				http://www.springframework.org/schema/tx 
+				http://www.springframework.org/schema/tx/spring-tx.xsd 
+				http://www.springframework.org/schema/aop 
+				http://www.springframework.org/schema/aop/spring-aop.xsd 
+				http://www.springframework.org/schema/context 
+				http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 自动扫描 -->  
+	<!-- <context:component-scan base-package="cn.dms" /> -->
+	<!-- <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>  -->
+	
+	<bean id="propertyConfigurer"  
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="location" value="classpath:jdbc.properties" />  
+    </bean>  
+  
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"  
+        destroy-method="close">  
+        <property name="driverClassName" value="${driver}" />  
+        <property name="url" value="${url}" />  
+        <property name="username" value="${username}" />  
+        <property name="password" value="${password}" />  
+    </bean>
+	<!-- 引用外部的数据库连接信息文件 -->
+	<!-- <context:property-placeholder location="classpath:jdbc.properties" />
+	<bean id="dataSource"
+        class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="${driver}" />
+        <property name="url" value="${url}" />
+        <property name="username" value="${username}" />
+        <property name="password" value="${password}" />
+        <property name="initialSize" value="2" />
+        <property name="maxActive" value="10" />
+        <property name="maxIdle" value="10" />
+        <property name="maxWait" value="1000" />
+        <property name="poolPreparedStatements" value="true" />
+        
+    </bean> -->
+		
+	<!-- <bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver"></property>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:jbit"></property>
+		<property name="username" value="yi"></property>
+		<property name="password" value="123"></property>
+	</bean> -->
+	
+	<!-- ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ Spring 集成mybatis ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ -->
+	<!-- Spring扫描所有的mapper文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- Mappper所在的包路径 -->
+		<property name="mapperLocations" value="classpath:cn/dms/mapper/*.xml"/>
+	</bean>
+	<!-- Spring 扫描DAO包 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- DAO包所在的包路径 -->
+		<property name="basePackage" value="cn.dms.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+	<!-- ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ Spring 集成ＭｙＢａｔｉｓ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ -->
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" />
+
+			<tx:method name="update*" propagation="REQUIRED" />
+
+			<tx:method name="delete*" propagation="REQUIRED" />
+
+			<tx:method name="find*" propagation="SUPPORTS" />
+			<tx:method name="load*" propagation="SUPPORTS" />
+			<tx:method name="search*" propagation="SUPPORTS" />
+
+			<tx:method name="*" propagation="SUPPORTS" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<!-- 事务入口（Service的包路径） -->
+		<aop:pointcut id="transactionPointcut" expression="execution(* cn.dms.services.*.*(..))" />
+		<!-- 将事务通知与切入点组合 -->
+		<aop:advisor pointcut-ref="transactionPointcut" advice-ref="txAdvice" />
+	</aop:config>
+
+</beans>
