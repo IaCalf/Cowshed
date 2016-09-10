@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dms.dao.IDormbuildDao">
+	<resultMap type="cn.dms.pojo.TDormbuild" id="td">
+		<id property="dormbuildid" column="DORMBUILDID"/>
+		<result property="dormbuildname" column="DORMBUILDNAME"/>
+		<result property="dormbuilddetail" column="DORMBUILDDETAIL"/>
+		<collection property="TRecords" >
+		
+		</collection>
+		<collection property="TDormmanagers">
+		
+		</collection>
+		<collection property="TStudents" javaType="cn.dms.pojo.TStudent">
+			<id property="studentid" column="STUDENTID"/>
+			<result property="stunum" column="STUNUM"/>
+			<result property="password" column="PASSWORD"/>
+			<result property="name" column="NAME"/>
+			<result property="dormname" column="DORMNAME"/>
+			<result property="sex" column="SEX"/>
+			<result property="tel" column="TEL"/>
+		</collection>
+		<collection property="TDorms" javaType="cn.dms.pojo.TDormbuild">
+			<id property="dormmanid" column="DORMMANID"/>
+			<result property="username" column="USERNAME"/>
+			<result property="password" column="PASSWORD"/>
+			<result property="name" column="NAME"/>
+			<result property="sex" column="SEX"/>
+			<result property="tel" column="TEL"/>
+		</collection>
+	</resultMap>
+	<!-- 查询所有楼栋信息 -->
+	<select id="getTDormbuildAll" resultType="cn.dms.pojo.TDormbuild">
+		select * from T_DORMBUILD
+	</select>
+	
+</mapper>

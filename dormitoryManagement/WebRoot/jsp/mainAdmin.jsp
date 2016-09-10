@@ -73,7 +73,7 @@
     opacity: 0.5;
 }
 .bs-docs-sidenav .active .icon-chevron-right, .bs-docs-sidenav .active a:hover .icon-chevron-right {
-    background-image: url("${pageContext.request.contextPath}/WebRoot/jsp/bootstrap/img/glyphicons-halflings-white.png");
+    background-image: url("${pageContext.request.contextPath}/jsp/bootstrap/img/glyphicons-halflings-white.png");
     opacity: 1;
 }
 </style>
@@ -92,7 +92,7 @@
 				<ul class="nav nav-list bs-docs-sidenav">
 					<li><a href="blank"><i class="icon-chevron-right"></i>首页</a></li>
 					<li><a href="${pageContext.request.contextPath}/dormmanager/show/1"><i class="icon-chevron-right"></i>宿舍管理员管理</a></li>
-					<li><a href="student.jsp"><i class="icon-chevron-right"></i>学生管理</a></li>
+					<li><a href="${pageContext.request.contextPath}/student/show/1"><i class="icon-chevron-right"></i>学生管理</a></li>
 					<li><a href="admin/dormBuild.jsp"><i class="icon-chevron-right"></i>宿舍楼管理</a></li>
 					<li><a href="record.jsp"><i class="icon-chevron-right"></i>缺勤记录</a></li>
 					<li><a href="admin/passwordChange.jsp"><i class="icon-chevron-right"></i>修改密码</a></li>

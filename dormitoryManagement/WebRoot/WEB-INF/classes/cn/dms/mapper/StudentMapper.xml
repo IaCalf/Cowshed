@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.dms.dao.IStudentDao">
-	<!-- <resultMap type="cn.dms.pojo.TStudent" id="ts">
+	<resultMap type="cn.dms.pojo.TStudent" id="ts">
 		<id property="studentid" column="STUDENTID"/>
 		<result property="stunum" column="STUNUM"/>
 		<result property="password" column="PASSWORD"/>
@@ -14,10 +14,88 @@
 			<result property="dormbuildname" column="DORMBUILDNAME"/>
 			<result property="dormbuilddetail" column="DORMBUILDDETAIL"/>
 		</association>
-	</resultMap> -->
+	</resultMap>
 	<!-- 学生登录方法 -->
 	<select id="loginStudent" parameterType="cn.dms.pojo.TStudent" resultType="cn.dms.pojo.TStudent">
 		select * from T_Student where stunum = #{stunum} and password = #{password}
 	</select>
+	<!-- 获取全部学生信息总条数 -->
+	<select id="getStudentCount" resultType="int">
+		select count(studentid) from T_STUDENT
+	</select>
+	<!-- 获取分页信息 -->
+	<select id="getStudentByPage" parameterType="java.util.Map" resultMap="ts">
+		<![CDATA[
+			select * from (
+				select * from 
+					(select t.*,rownum r from T_STUDENT t) where r<=#{size} and r>=#{no}) o 
+			left join T_DORMBUILD d
+			on o.dormbuildid = d.dormbuildid
+           ]]>  
+	</select>
 	
+	<!-- 动态模糊查询 -->
+	<select id="getStudentByNamePage"  parameterType="java.util.Map" resultMap="ts">
+		select * from (
+				  select t.* from
+				     (select s.*,d.dormbuildname,rownum r from T_DORMBUILD d,T_STUDENT s where 
+		<if test="dormbuildid != 0 and name != null">
+			<![CDATA[
+				s.name like #{name} and s.dormbuildid=d.dormbuildid and d.dormbuildid=#{dormbuildid}) t
+				]]> 
+		</if>
+		<if test="dormbuildid != 0 and stunum != null">
+			<![CDATA[
+				s.stunum like #{stunum} and s.dormbuildid=d.dormbuildid and d.dormbuildid=#{dormbuildid}) t
+				]]> 
+		</if>
+		<if test="dormbuildid != 0 and dormname != null">
+			<![CDATA[
+				s.dormname like #{dormname} and s.dormbuildid=d.dormbuildid and d.dormbuildid=#{dormbuildid}) t
+				]]> 
+		</if>
+		<if test="dormbuildid == 0 and name != null">
+			<![CDATA[
+				s.name like #{name} and s.dormbuildid=d.dormbuildid) t
+				]]> 
+		</if>
+		<if test="dormbuildid == 0 and stunum != null">
+			<![CDATA[
+				s.stunum like #{stunum} and s.dormbuildid=d.dormbuildid) t
+				]]> 
+		</if>
+		<if test="dormbuildid == 0 and dormname != null">
+			<![CDATA[
+				s.dormname like #{dormname} and s.dormbuildid=d.dormbuildid) t
+				]]> 
+		</if>
+		<![CDATA[
+			where r<=#{size} and r>=#{no})
+		]]> 
+	</select>
+	
+	<!-- 增加学生信息 -->
+	<insert id="addTStudent" parameterType="cn.dms.pojo.TStudent" >
+		insert into T_STUDENT(stunum,password,name,dormname,sex,tel) values(#{stunum},#{password},#{name},#{dormname},#{sex},#{tel})
+	</insert>
+	
+	<!-- 根据ID查询学生信息  -->
+	<select id="getStudentById" parameterType="long" resultType="cn.dms.pojo.TStudent">
+		select * from T_STUDENT where STUDENTID = #{studentid}
+	</select>
+	
+	<!-- 修改学生信息  -->
+	<update id="updateTStudent" parameterType="cn.dms.pojo.TStudent">
+		update T_STUDENT set stunum = #{stunum},Password = #{password},Name = #{name},dormname = #{dormname}, Sex = #{sex},Tel = #{tel} where studentid = #{studentid}
+	</update>
+	
+	<!-- 删除学生信息  -->
+	<delete id="deleteTStudent" parameterType="long">
+		delete from T_STUDENT where studentid = #{studentid}
+	</delete>
+	
+	<!-- 添加学生所属的楼栋  -->
+	<update id="updateTDormbuild" parameterType="java.util.Map">
+		update T_STUDENT set Dormbuild = #{dormbuildid} where studentid = #{studentid}
+	</update>
 </mapper>

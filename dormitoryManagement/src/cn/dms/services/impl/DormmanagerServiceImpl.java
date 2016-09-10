@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.dms.dao.IDormmanagerDao;
@@ -62,7 +61,7 @@ public class DormmanagerServiceImpl implements IDormmanagerService {
 		map.put("name", "%"+name+"%");
 		map.put("no", (no-1)*size+1);
 		map.put("size", no*size);
-		return dormmanagerDao.getDormmanagerByNamePage(map);
+		return dormmanagerDao.getDormmanagerByUserNamePage(map);
 	}
 
 	@Override
@@ -90,5 +89,15 @@ public class DormmanagerServiceImpl implements IDormmanagerService {
 		// TODO Auto-generated method stub
 		dormmanagerDao.deleteTDormmanager(dormmanid);
 		System.out.println("删除成功！");
+	}
+
+	@Override
+	public void updateTDormbuild(long dormbuildid, long dormmanid) {
+		// TODO Auto-generated method stub
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("dormbuildid", dormbuildid);
+		map.put("dormmanid", dormmanid);
+		dormmanagerDao.updateTDormbuild(map);
+		System.out.println("修改管理楼栋成功！");
 	}
 }

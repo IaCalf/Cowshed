@@ -38,7 +38,7 @@
 		<![CDATA[
 			select * from (
 				select * from 
-					(select t.*,rownum r from T_Dormmanager t where username like #{name}) where r<=#{size} and r>=#{no}) o 
+					(select t.*,rownum r from T_Dormmanager t where name like #{name}) where r<=#{size} and r>=#{no}) o 
 			left join T_DORMBUILD d
 			on o.dormbuildid = d.dormbuildid
 			]]>  
@@ -48,7 +48,7 @@
 		<![CDATA[
 			select * from (
 				select * from 
-					(select t.*,rownum r from T_Dormmanager t where name like #{name}) where r<=#{size} and r>=#{no}) o 
+					(select t.*,rownum r from T_Dormmanager t where username like #{name}) where r<=#{size} and r>=#{no}) o 
 			left join T_DORMBUILD d
 			on o.dormbuildid = d.dormbuildid
 		   ]]>  
@@ -69,4 +69,8 @@
 	<delete id="deleteTDormmanager" parameterType="long">
 		delete from T_Dormmanager where dormmanid = #{dormmanid}
 	</delete>
+	<!-- 添加宿舍管理员管理的楼栋 -->
+	<update id="updateTDormbuild" parameterType="java.util.Map">
+		update T_Dormmanager set Dormbuild = #{dormbuildid} where dormmanid = #{dormmanid}
+	</update>
 </mapper>

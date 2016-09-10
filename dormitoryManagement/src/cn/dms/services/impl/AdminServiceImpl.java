@@ -2,7 +2,6 @@ package cn.dms.services.impl;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.dms.dao.IAdminDao;

@@ -28,7 +28,7 @@
 <div class="data_list">
 		<div class="data_list_title">
 		<c:choose>
-			<c:when test="${student.studentId!=null }">
+			<c:when test="${student!=null }">
 				修改学生信息
 			</c:when>
 			<c:otherwise>
@@ -36,13 +36,13 @@
 			</c:otherwise>
 		</c:choose>
 		</div>
-		<form action="student?action=save" method="post" onsubmit="return checkForm()">
+		<form <c:choose><c:when test="${student!=null }">action="update"</c:when><c:otherwise>action="add"</c:otherwise></c:choose> method="post" onsubmit="return checkForm()">
 			<div class="data_form" >
-				<input type="hidden" id="studentId" name="studentId" value="${student.studentId }"/>
+				<input type="hidden" id="studentId" name="studentid" value="${student.studentid }"/>
 					<table align="center">
 						<tr>
 							<td><font color="red">*</font>学号：</td>
-							<td><input type="text" id="userName"  name="userName" value="${student.userName }"  style="margin-top:5px;height:30px;" /></td>
+							<td><input type="text" id="userName"  name="stunum" value="${student.stunum }"  style="margin-top:5px;height:30px;" /></td>
 						</tr>
 						<tr>
 							<td><font color="red">*</font>密码：</td>
@@ -69,16 +69,16 @@
 						<tr>
 							<td><font color="red">*</font>宿舍楼：</td>
 							<td>
-								<select id="dormBuildId" name="dormBuildId" style="width: 90px;">
-									<c:forEach var="dormBuild" items="${dormBuildList }">
-										<option value="${dormBuild.dormBuildId }" ${student.dormBuildId==dormBuild.dormBuildId?'selected':'' }>${dormBuild.dormBuildName }</option>
+								<select id="dormbuildid" name="dormBuildId" style="width: 90px;">
+									<c:forEach var="dormBuild" items="${sessionScope.dormBuildList }">
+										<option value="${dormBuild.dormbuildid }" ${student.TDormbuild.dormbuildid==dormBuild.dormbuildid?'selected':'' }>${dormBuild.dormbuildname }</option>
 									</c:forEach>
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<td><font color="red">*</font>寝室：</td>
-							<td><input type="text" id="dormName"  name="dormName" value="${student.dormName }"  style="margin-top:5px;height:30px;" /></td>
+							<td><input type="text" id="dormName"  name="dormname" value="${student.dormname }"  style="margin-top:5px;height:30px;" /></td>
 						</tr>
 						<tr>
 							<td><font color="red">*</font>联系电话：</td>

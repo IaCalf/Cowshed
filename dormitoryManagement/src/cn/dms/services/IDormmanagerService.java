@@ -1,7 +1,6 @@
 package cn.dms.services;
 
 import java.util.List;
-import java.util.Map;
 
 import cn.dms.pojo.TDormmanager;
 
@@ -27,4 +26,6 @@ public interface IDormmanagerService {
 	public void updateTDormmanager(TDormmanager dormmanager);
 	//删除宿舍管理员信息
 	public void deleteTDormmanager(long dormmanid);
+	//添加宿舍管理员管理的楼栋
+	public void updateTDormbuild(long dormbuildid, long dormmanid);
 }

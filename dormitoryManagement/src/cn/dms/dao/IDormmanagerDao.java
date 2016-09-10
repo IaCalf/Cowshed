@@ -24,4 +24,6 @@ public interface IDormmanagerDao {
 	public void updateTDormmanager(TDormmanager dormmanager);
 	//删除宿舍管理员信息
 	public void deleteTDormmanager(long dormmanid);
+	//添加宿舍管理员管理的楼栋
+	public void updateTDormbuild(Map<String, Object> map);
 }

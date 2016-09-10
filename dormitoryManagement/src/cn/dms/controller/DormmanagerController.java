@@ -26,7 +26,6 @@ public class DormmanagerController {
 	//分页
 	@RequestMapping(value="/show/{no}", method=RequestMethod.GET)
 	public ModelAndView getDormmanagerPage(@PathVariable int no){
-		System.out.println("-------------us");
 		pt.setTotalCount(dormmanagerService.getDormmanagerCount());
 		pt.setPageno(no);
 		List<TDormmanager> l = dormmanagerService.getDormmanagerByPage(pt.getPageno(), pt.getPagesize());
@@ -43,9 +42,9 @@ public class DormmanagerController {
 		pt.setTotalCount(dormmanagerService.getDormmanagerCount());
 		pt.setPageno(no);
 		if(searchType.equals("userName")){
-			pt.setPagedata(dormmanagerService.getDormmanagerByNamePage(s_dormManagerText, pt.getPageno(), pt.getPagesize()));
-		}else if(searchType.equals("name")){
 			pt.setPagedata(dormmanagerService.getDormmanagerByUserNamePage(s_dormManagerText, pt.getPageno(), pt.getPagesize()));
+		}else if(searchType.equals("name")){
+			pt.setPagedata(dormmanagerService.getDormmanagerByNamePage(s_dormManagerText, pt.getPageno(), pt.getPagesize()));
 		}
 			
 		mv.addObject("dpt",pt);
